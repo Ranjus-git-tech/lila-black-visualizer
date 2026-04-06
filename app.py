@@ -104,6 +104,14 @@ st.title("🎮 Level Designer Behavior Tool")
 
 manifest = build_manifest()
 
+st.sidebar.markdown("""
+<h2 style='margin-bottom: 0;'>
+<span style='color:#00f5ff; text-shadow:0 0 6px #00f5ff;'>L</span>evel
+<span style='color:#ff2e2e; text-shadow:0 0 6px #ff2e2e;'>S</span>ight
+</h2>
+""", unsafe_allow_html=True)
+st.sidebar.markdown("---")
+
 dates = sorted(manifest["date"].unique(), reverse=True)
 selected_date = st.sidebar.selectbox("Select Date", dates)
 
