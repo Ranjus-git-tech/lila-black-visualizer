@@ -55,6 +55,7 @@ So instead of loading everything, this tool uses a **sampling approach**:
 * Only a small, representative set of matches is used
 * Keeps the app fast and responsive
 * Still preserves meaningful gameplay patterns
+**This ensures the tool remains usable even with large-scale game data.**
 
 ---
 
