@@ -4,3 +4,4 @@ pyarrow
 pillow
 matplotlib
 numpy
+plotly
