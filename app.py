@@ -107,6 +107,9 @@ manifest = build_manifest()
 dates = sorted(manifest["date"].unique(), reverse=True)
 selected_date = st.sidebar.selectbox("Select Date", dates)
 
+map_list = ["AmbroseValley", "GrandRift", "Lockdown"]
+selected_map = st.sidebar.selectbox("Select Map", map_list)
+
 # sampling
 all_matches = manifest[manifest["date"] == selected_date]["match_id"].unique().tolist()
 random.shuffle(all_matches)
@@ -122,10 +125,14 @@ view_mode = st.sidebar.radio("View Mode", ["Movement", "Heatmap"])
 target_matches = sampled_matches if selected_match == "All Sampled Matches" else [selected_match]
 
 df, map_id = load_data(selected_date, target_matches)
+# 🔥 FORCE selected map instead of random
+df = df[df["map_id"] == selected_map]
 
 if df.empty:
-    st.warning("No data loaded")
+    st.warning("No data for selected map")
     st.stop()
+
+map_id = selected_map
 
 # timeline
 # timeline
@@ -218,7 +225,17 @@ fig.update_layout(
     margin=dict(l=0, r=0, t=0, b=0),
     xaxis=dict(range=[0, 1024], visible=False),
     yaxis=dict(range=[0, 1024], visible=False),
-    plot_bgcolor="black"
+    plot_bgcolor="black",
+    
+    legend=dict(
+    x=0,
+    y=0.5,
+    bgcolor="rgba(0,0,0,0.5)"
 )
+)
+# hide legend on mobile
+is_mobile = "mobile" in st.runtime.scriptrunner.get_script_run_ctx().client.request.headers.get("User-Agent", "").lower()
 
+if is_mobile:
+    fig.update_layout(showlegend=False)
 st.plotly_chart(fig, use_container_width=True)
