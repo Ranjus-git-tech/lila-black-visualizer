@@ -220,6 +220,7 @@ else:
     ))
 
 # layout
+map_guide = st.checkbox("🧭 Map Guide", value=False)
 fig.update_layout(
     height=800,
     margin=dict(l=0, r=0, t=0, b=0),
