@@ -128,7 +128,17 @@ if df.empty:
     st.stop()
 
 # timeline
+# timeline
+if df["match_sec"].isnull().all():
+    st.error("Timeline data missing")
+    st.stop()
+
 max_time = int(df["match_sec"].max())
+
+# 🔥 FIX: handle edge cases
+if max_time <= 0 or pd.isna(max_time):
+    max_time = 1
+
 time_val = st.slider("Timeline", 0, max_time, max_time)
 
 df = df[df["match_sec"] <= time_val]
