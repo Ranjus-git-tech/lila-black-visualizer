@@ -231,11 +231,8 @@ fig.update_layout(
     x=0,
     y=0.5,
     bgcolor="rgba(0,0,0,0.5)"
+),
+    showlegend=map_guide
 )
-)
-# hide legend on mobile
-is_mobile = "mobile" in st.runtime.scriptrunner.get_script_run_ctx().client.request.headers.get("User-Agent", "").lower()
 
-if is_mobile:
-    fig.update_layout(showlegend=False)
 st.plotly_chart(fig, use_container_width=True)
