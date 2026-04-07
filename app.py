@@ -231,6 +231,7 @@ if view_mode == "Movement":
                     marker=dict(
                         size=10,
                         color=COLORS["human"],
+                        symbol="circle",
                         opacity=1.0
                     ),
                     name=f"Human {label_map[evt]}"
@@ -245,6 +246,7 @@ if view_mode == "Movement":
                     marker=dict(
                         size=9,
                         color=COLORS["bot"], 
+                        symbol="x",
                         opacity=1.0
                     ),
                     name=f"Bot {label_map[evt]}"
