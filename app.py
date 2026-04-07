@@ -195,14 +195,14 @@ if view_mode == "Movement":
 
     # events
     event_styles = {
-    "Kill": {"color": COLORS["bot"], "opacity": 1.0},
-    "BotKill": {"color": COLORS["human"], "opacity": 0.9},
-
-    "Killed": {"color": COLORS["Storm"], "opacity": 1.0},
-    "BotKilled": {"color": COLORS["Loot"], "opacity": 0.9},
-
-    "KilledByStorm": {"color": COLORS["Storm"], "opacity": 0.9},
-    "Loot": {"color": COLORS["Loot"], "opacity": 1.0}
+    "Kill": {"color": "#ff2e2e", "opacity": 1.0},        # 🔴 human kill
+    "BotKill": {"color": "#00cfff", "opacity": 0.9},     # 🔵 bot kill
+    
+    "Killed": {"color": "#b266ff", "opacity": 1.0},      # 🟣 human death
+    "BotKilled": {"color": "#ff8c1a", "opacity": 0.9},   # 🟠 bot death
+    
+    "KilledByStorm": {"color": "#ffffff", "opacity": 1.0},
+    "Loot": {"color": "#ffd84d", "opacity": 1.0}
     }
     label_map = {
     "Kill": "Kill",
