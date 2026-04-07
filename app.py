@@ -195,15 +195,16 @@ if view_mode == "Movement":
 
     # events
     event_styles = {
-    "Kill": {"color": "#ff0000", "opacity": 1.0},        # 🔴 PURE RED (force visible)
-    "BotKill": {"color": "#00ffff", "opacity": 1.0},     # 🔵 PURE CYAN
+    "Kill": {"color": "#ff0000"},       # 🔴 pure red
+    "BotKill": {"color": "#00ffff"},    # 🔵 cyan
     
-    "Killed": {"color": "#ff00ff", "opacity": 1.0},      # 🟣 MAGENTA (stronger than purple)
-    "BotKilled": {"color": "#ff9900", "opacity": 1.0},   # 🟠 ORANGE
+    "Killed": {"color": "#ff00ff"},     # 🟣 magenta
+    "BotKilled": {"color": "#00ff00"},  # 🟢 green
     
-    "KilledByStorm": {"color": "#ffffff", "opacity": 1.0},
-    "Loot": {"color": "#ffff00", "opacity": 1.0}         # 🟡 PURE YELLOW
+    "KilledByStorm": {"color": "#ffffff"},
+    "Loot": {"color": "#ffff00"}
     }
+
     label_map = {
     "Kill": "Kill",
     "BotKill": "Kill",
