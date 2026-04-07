@@ -1,38 +1,52 @@
 # 🧩 Architecture – LevelSight
 
+A lightweight, visual-first system designed to turn raw gameplay logs into **spatial insight for level designers**.
+
+> Built for decision-making, not reporting.
+
+---
+
 ## 🛠️ What I Built & Why
 
-I built a lightweight visualization tool using:
+* **Streamlit** → rapid development, minimal UI friction
+* **Plotly (Scattergl + Heatmaps)** → interactive, GPU-accelerated rendering
+* **Pandas** → fast, flexible data transformation
 
-* **Streamlit** → fast iteration, minimal UI overhead
-* **Plotly** → interactive rendering (zoom, hover, layering)
-* **Pandas** → efficient data handling
-
-The goal was not to build a dashboard, but a **decision tool for level designers** — prioritizing clarity and speed over complexity.
+**Goal:** Not a dashboard. A **decision tool** that surfaces patterns instantly.
 
 ---
 
 ## 🔄 Data Flow
 
-1. **Raw Data (Parquet / JSON-like logs)**
-2. → Loaded into Pandas DataFrames
-3. → Transformed into:
+```
+Raw Data (Parquet / logs)
+        ↓
+Load → Pandas DataFrames
+        ↓
+Transform → positions, events, player type
+        ↓
+Coordinate Mapping → world → minimap pixels
+        ↓
+Visualization → Plotly layers
+        ↓
+UI → Streamlit controls
+```
 
-   * Player positions (x, z)
-   * Event types (Kill, Death, Loot, Storm)
-   * Player type (Human / Bot)
-4. → Converted into pixel coordinates
-5. → Rendered on minimap using Plotly
+### Transformed Fields
+
+* Player positions: `(x, z)` → `(px, py)`
+* Event types: `Kill, Death, Loot, Storm`
+* Player type: `is_human`
 
 ---
 
 ## 🗺️ Coordinate Mapping (Core Problem)
 
-Game coordinates exist in a world space, not aligned with the minimap.
+Game data exists in **world space**, not aligned with the minimap.
 
-### Approach:
+### Approach
 
-```python
+```
 u = (x - origin_x) / scale
 v = (z - origin_z) / scale
 
@@ -40,55 +54,134 @@ px = u * 1024
 py = (1 - v) * 1024
 ```
 
-### Why this works:
+### Why this works
 
-* Normalizes coordinates into 0–1 range
-* Maps them directly onto a 1024×1024 minimap
+* Normalizes coordinates into **[0, 1]**
+* Maps directly to a **1024×1024 minimap**
 * Inverts Y-axis to match screen coordinates
 
-### Assumptions:
+### Assumptions
 
-* Each map has fixed origin and scale
-* Data is consistent per map
-* No rotation required (axis-aligned)
+* Fixed `origin` and `scale` per map
+* Axis-aligned maps (no rotation)
+* Consistent coordinate system per dataset
+
+---
+
+## 📦 Processing Layer
+
+Handled with **Pandas**
+
+Responsibilities:
+
+* Filter by **date / map / match**
+* Split into:
+
+  * Movement data
+  * Combat events
+  * Loot / storm events
+* Normalize event types (e.g., `Kill` vs `BotKill`)
+
+---
+
+## 🎯 Visualization Layer
+
+Built with **Plotly (Scattergl)**
+
+### Encoding System
+
+* 🔵 Humans | 🔴 Bots
+* ● Kills (circles)
+* ✕ Deaths (X markers)
+* 🟡 Loot
+* 🟣 Storm
+
+### Heatmaps
+
+* Density-based contours to reveal:
+
+  * Combat hotspots
+  * Movement clusters
+
+**Why Scattergl?**
+
+* Handles large point sets smoothly
+* Keeps interaction responsive (zoom, pan, hover)
+
+---
+
+## 🧠 Sampling Layer (Performance Strategy)
+
+Script: `sample_data.py`
+
+### Purpose
+
+* Reduce dataset size
+* Maintain representative patterns
+
+### Steps
+
+1. Randomly sample match files
+2. Balance across days
+3. Output lightweight dataset
+
+### Tradeoff
+
+* **Speed & usability** vs full completeness
 
 ---
 
 ## ⚠️ Ambiguities & Handling
 
-| Problem                                 | Solution                              |
-| --------------------------------------- | ------------------------------------- |
-| Bot vs Human unclear in events          | Used `is_human` flag                  |
-| Duplicate event types (Kill vs BotKill) | Normalized via mapping                |
-| Sparse data on certain days/maps        | Accepted as real distribution         |
-| Large dataset                           | Used sampling to maintain performance |
+| Problem               | Solution                     |
+| --------------------- | ---------------------------- |
+| Bot vs Human unclear  | Used `is_human` flag         |
+| Duplicate event types | Normalized via mapping       |
+| Sparse days/maps      | Treated as real distribution |
+| Large dataset         | Sampling for performance     |
 
 ---
 
-## ⚖️ Tradeoffs
+## ⚖️ Key Design Decisions
 
-| Decision                         | Tradeoff                           |
-| -------------------------------- | ---------------------------------- |
-| Sampling instead of full dataset | Faster UI, less completeness       |
-| Streamlit over full frontend     | Faster dev, less customization     |
-| Visual encoding (color + shape)  | Simpler UX vs richer detail        |
-| No backend                       | Easier deploy, limited scalability |
+| Decision                   | Why                    | Tradeoff              |
+| -------------------------- | ---------------------- | --------------------- |
+| Sampling over full dataset | Fast, interactive UI   | Not exhaustive        |
+| Streamlit UI               | Rapid build, simple UX | Limited customization |
+| Visual-first encoding      | Instant readability    | Less numeric depth    |
+| Separate event handling    | Cleaner visuals        | More logic            |
 
 ---
 
-## 🚀 Key Design Principle
+## 🚧 Limitations
 
-> This tool prioritizes **instant visual understanding** over analytical depth.
+* No real-time ingestion
+* No replay/timeline system
+* Sampling may miss edge cases
+* Bot behavior inferred (not modeled)
 
-Level designers should:
+---
 
-* See patterns immediately
-* Not interpret raw data
+## 🚀 Scalability Path
+
+* Add **DuckDB / PostgreSQL** for larger datasets
+* Incremental loading (windowed queries)
+* Server-side filtering API
+* Advanced WebGL optimizations for dense scenes
 
 ---
 
 ## 📦 Summary
 
-* Lightweight, fast, and interactive
-* Designed for **decision-making, not reporting**
-* Solves the hardest problem: **mapping gameplay to spatial insight**
+* Lightweight, fast, interactive
+* Maps gameplay → spatial insight
+* Optimized for **clarity over complexity**
+
+---
+
+## 🎯 Final Principle
+
+> The hardest problem is not storing data.
+> It is making **patterns obvious instantly**.
+
+**This system is designed to do exactly that.**
