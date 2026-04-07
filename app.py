@@ -195,14 +195,14 @@ if view_mode == "Movement":
 
     # events
     event_styles = {
-    "Kill": {"color": COLORS["bot"]},        # 🔴 red
-    "BotKill": {"color": COLORS["human"]},   # 🔵 blue
+    "Kill": {"color": "#ff0000"},        # 🔴 kill
+    "BotKill": {"color": "#ff0000"},     # 🔴 same kill
     
-    "Killed": {"color": COLORS["Storm"]},    # 🟣 violet
-    "BotKilled": {"color": COLORS["Loot"]},  # 🟡 yellow
+    "Killed": {"color": "#ff00ff"},      # 🟣 death
+    "BotKilled": {"color": "#ff00ff"},   # 🟣 same
     
-    "KilledByStorm": {"color": COLORS["Storm"]},
-    "Loot": {"color": COLORS["Loot"]}
+    "KilledByStorm": {"color": "#ffffff"},
+    "Loot": {"color": "#ffff00"}
     }
     label_map = {
     "Kill": "Kill",
@@ -230,7 +230,7 @@ if view_mode == "Movement":
                     mode="markers",
                     marker=dict(
                         size=10,
-                        color=style["color"],
+                        color=COLORS["human"],
                         opacity=1.0
                     ),
                     name=f"Human {label_map[evt]}"
@@ -244,7 +244,7 @@ if view_mode == "Movement":
                     mode="markers",
                     marker=dict(
                         size=9,
-                        color=style["color"],
+                        color=COLORS["bot"], 
                         opacity=1.0
                     ),
                     name=f"Bot {label_map[evt]}"
