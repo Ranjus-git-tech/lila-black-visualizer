@@ -194,78 +194,56 @@ if view_mode == "Movement":
         ))
 
     # events
-    event_styles = {
-    "Kill": {"color": "#ff0000"},        # 🔴 kill
-    "BotKill": {"color": "#ff0000"},     # 🔴 same kill
-    
-    "Killed": {"color": "#ff00ff"},      # 🟣 death
-    "BotKilled": {"color": "#ff00ff"},   # 🟣 same
-    
-    "KilledByStorm": {"color": "#ffffff"},
-    "Loot": {"color": "#ffff00"}
-    }
-    label_map = {
-    "Kill": "Kill",
-    "BotKill": "Kill",
-    "Killed": "Death",
-    "BotKilled": "Death",
-    "KilledByStorm": "Storm",
-    "Loot": "Loot"
+    # 1. Define the unique look for every specific combat situation
+    # Logic: Kills get Circles, Deaths get 'X' symbols.
+    combat_mapping = {
+        # EVENT TYPE    | HUMAN? | COLOR     | SYMBOL   | LABEL
+        ("Kill",      True):  {"c": "#00f5ff", "s": "circle", "n": "Human Kill"},   # Cyan
+        ("BotKill",   True):  {"c": "#00f5ff", "s": "circle", "n": "Human Kill"},   # (Same as above)
+        ("Killed",    True):  {"c": "#ffffff", "s": "x",      "n": "Human Death"},  # White
+        ("BotKilled", True):  {"c": "#ffffff", "s": "x",      "n": "Human Death"},
+        
+        ("Kill",      False): {"c": "#ff2e2e", "s": "circle", "n": "Bot Kill"},     # Bright Red
+        ("BotKill",   False): {"c": "#ff2e2e", "s": "circle", "n": "Bot Kill"},
+        ("Killed",    False): {"c": "#ff9900", "s": "x",      "n": "Bot Death"},    # Orange
+        ("BotKilled", False): {"c": "#ff9900", "s": "x",      "n": "Bot Death"}
     }
 
-    for evt, style in event_styles.items():
+    # 2. Iterate through the mapping to create distinct traces
+    for (evt_name, is_human_status), style in combat_mapping.items():
+        # Filter data for this specific combination
+        sub = df[(df["event"] == evt_name) & (df["is_human"] == is_human_status)]
+        
+        if not sub.empty:
+            fig.add_trace(go.Scattergl(
+                x=sub["px"],
+                y=sub["py"],
+                mode="markers",
+                marker=dict(
+                    size=10 if style["s"] == "circle" else 12, # Make X's slightly larger to be seen
+                    color=style["c"],
+                    symbol=style["s"],
+                    line=dict(width=1, color="white"), # Thin border makes markers pop on dark maps
+                    opacity=1.0
+                ),
+                name=style["n"]
+            ))
+
+    # 3. Handle Non-Combat Events (Loot, Storm) separately
+    other_events = {
+        "Loot": {"color": "#ffff00", "name": "Loot"},
+        "KilledByStorm": {"color": "#a64dff", "name": "Storm Death"}
+    }
+    
+    for evt, style in other_events.items():
         sub = df[df["event"] == evt]
-    
-        # 🔥 ONLY split combat events
-        if evt in ["Kill", "BotKill", "Killed", "BotKilled"]:
-    
-            humans = sub[sub["is_human"] == True]
-            bots = sub[sub["is_human"] == False]
-    
-            # HUMAN
-            if not humans.empty:
-                fig.add_trace(go.Scattergl(
-                    x=humans["px"],
-                    y=humans["py"],
-                    mode="markers",
-                    marker=dict(
-                        size=10,
-                        color=COLORS["human"],
-                        symbol="circle",
-                        opacity=1.0
-                    ),
-                    name=f"Human {label_map[evt]}"
-                ))
-    
-            # BOT
-            if not bots.empty:
-                fig.add_trace(go.Scattergl(
-                    x=bots["px"],
-                    y=bots["py"],
-                    mode="markers",
-                    marker=dict(
-                        size=9,
-                        color=COLORS["bot"], 
-                        symbol="x",
-                        opacity=1.0
-                    ),
-                    name=f"Bot {label_map[evt]}"
-                ))
-    
-        else:
-            # 🔥 DO NOT split non-combat events
-            if not sub.empty:
-                fig.add_trace(go.Scattergl(
-                    x=sub["px"],
-                    y=sub["py"],
-                    mode="markers",
-                    marker=dict(
-                        size=9,
-                        color=style["color"],
-                        opacity=1.0
-                    ),
-                    name=label_map[evt]
-                ))
+        if not sub.empty:
+            fig.add_trace(go.Scattergl(
+                x=sub["px"], y=sub["py"],
+                mode="markers",
+                marker=dict(size=9, color=style["color"]),
+                name=style["name"]
+            ))
   
 else:
     # heatmap
