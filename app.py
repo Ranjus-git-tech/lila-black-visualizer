@@ -213,55 +213,56 @@ if view_mode == "Movement":
     }
     for evt, style in event_styles.items():
         sub = df[df["event"] == evt]
-
-    # 🔥 ONLY split combat events
-    if evt in ["Kill", "BotKill", "Killed", "BotKilled"]:
-
-        humans = sub[sub["is_human"] == True]
-        bots = sub[sub["is_human"] == False]
-
-        # HUMAN
-        if not humans.empty:
-            fig.add_trace(go.Scattergl(
-                x=humans["px"],
-                y=humans["py"],
-                mode="markers",
-                marker=dict(
-                    size=9,
-                    color=style["color"],
-                    opacity=1.0
-                ),
-                name=f"Human {label_map[evt]}"
-            ))
-
-        # BOT
-        if not bots.empty:
-            fig.add_trace(go.Scattergl(
-                x=bots["px"],
-                y=bots["py"],
-                mode="markers",
-                marker=dict(
-                    size=9,
-                    color=style["color"],
-                    opacity=0.5
-                ),
-                name=f"Bot {label_map[evt]}"
-            ))
-
-    else:
-        # 🔥 DO NOT split non-combat events
-        if not sub.empty:
-            fig.add_trace(go.Scattergl(
-                x=sub["px"],
-                y=sub["py"],
-                mode="markers",
-                marker=dict(
-                    size=9,
-                    color=style["color"],
-                    opacity=1.0
-                ),
-                name=label_map[evt]
-            ))
+    
+        # 🔥 ONLY split combat events
+        if evt in ["Kill", "BotKill", "Killed", "BotKilled"]:
+    
+            humans = sub[sub["is_human"] == True]
+            bots = sub[sub["is_human"] == False]
+    
+            # HUMAN
+            if not humans.empty:
+                fig.add_trace(go.Scattergl(
+                    x=humans["px"],
+                    y=humans["py"],
+                    mode="markers",
+                    marker=dict(
+                        size=9,
+                        color=style["color"],
+                        opacity=1.0
+                    ),
+                    name=f"Human {label_map[evt]}"
+                ))
+    
+            # BOT
+            if not bots.empty:
+                fig.add_trace(go.Scattergl(
+                    x=bots["px"],
+                    y=bots["py"],
+                    mode="markers",
+                    marker=dict(
+                        size=9,
+                        color=style["color"],
+                        opacity=0.5
+                    ),
+                    name=f"Bot {label_map[evt]}"
+                ))
+    
+        else:
+            # 🔥 DO NOT split non-combat events
+            if not sub.empty:
+                fig.add_trace(go.Scattergl(
+                    x=sub["px"],
+                    y=sub["py"],
+                    mode="markers",
+                    marker=dict(
+                        size=9,
+                        color=style["color"],
+                        opacity=1.0
+                    ),
+                    name=label_map[evt]
+                ))
+  
 else:
     # heatmap
     combat = df[df["event"].isin(["Kill", "BotKill", "Killed", "BotKilled"])]
