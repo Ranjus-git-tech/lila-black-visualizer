@@ -229,7 +229,7 @@ if view_mode == "Movement":
                     y=humans["py"],
                     mode="markers",
                     marker=dict(
-                        size=9,
+                        size=10,
                         color=style["color"],
                         opacity=1.0
                     ),
