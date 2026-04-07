@@ -188,22 +188,30 @@ if view_mode == "Movement":
             y=group["py"],
             mode="lines",
             line=dict(color=color, width=1),
-            opacity=0.3,
+            opacity=0.2,
             hoverinfo="skip",
             showlegend=False
         ))
 
     # events
-    event_colors = {
-        "Kill": COLORS["Kill"],
-        "BotKill": COLORS["Kill"],
-        "Killed": COLORS["Death"],
-        "BotKilled": COLORS["Death"],
-        "KilledByStorm": COLORS["Storm"],
-        "Loot": COLORS["Loot"]
+    event_styles = {
+        "Kill": {"color": "#ff3b3b", "opacity": 1.0},        # human kill
+        "BotKill": {"color": "#00ff88", "opacity": 0.7},     # bot kill
+        "Killed": {"color": "#b266ff", "opacity": 1.0},      # human death
+        "BotKilled": {"color": "#4da6ff", "opacity": 0.7},   # bot death
+        "KilledByStorm": {"color": "#aa66ff", "opacity": 0.8},
+        "Loot": {"color": "#ffd84d", "opacity": 1.0}
+    
     }
-
-    for evt, color in event_colors.items():
+    label_map = {
+        "Kill": "Human Kill",
+        "BotKill": "Bot Kill",
+        "Killed": "Human Death",
+        "BotKilled": "Bot Death",
+        "KilledByStorm": "Storm Death",
+        "Loot": "Loot"
+    }
+    for evt, style in event_styles.items():
         sub = df[df["event"] == evt]
 
         fig.add_trace(go.Scattergl(
@@ -211,12 +219,12 @@ if view_mode == "Movement":
             y=sub["py"],
             mode="markers",
             marker=dict(
-                size=9,            
-                color=color,
-                opacity=0.9 
+                size=9,
+                color=style["color"],
+                opacity=style["opacity"],
             ),
+            name=label_map[evt]
 
-            name=evt
         ))
 
 else:
