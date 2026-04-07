@@ -212,7 +212,7 @@ if view_mode == "Movement":
         "Loot": "Loot"
     }
     for evt, style in event_styles.items():
-    sub = df[df["event"] == evt]
+        sub = df[df["event"] == evt]
 
     # split based on actual player type
     humans = sub[sub["is_human"] == True]
