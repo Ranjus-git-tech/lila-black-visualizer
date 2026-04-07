@@ -132,10 +132,10 @@ view_mode = st.sidebar.radio("View Mode", ["Movement", "Heatmap"])
 
 target_matches = sampled_matches if selected_match == "All Sampled Matches" else [selected_match]
 
-df, map_id = load_data(selected_date, target_matches)
+
 # 🔥 FORCE selected map instead of random
 df = df[df["map_id"] == selected_map]
-
+df, map_id = load_data(selected_date, target_matches)
 if df.empty:
     st.warning("No data for selected map")
     st.stop()
