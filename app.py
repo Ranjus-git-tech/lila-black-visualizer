@@ -204,13 +204,14 @@ if view_mode == "Movement":
     
     }
     label_map = {
-        "Kill": "Human Kill",
-        "BotKill": "Bot Kill",
-        "Killed": "Human Death",
-        "BotKilled": "Bot Death",
-        "KilledByStorm": "Storm Death",
-        "Loot": "Loot"
+    "Kill": "Kill",
+    "BotKill": "Kill",
+    "Killed": "Death",
+    "BotKilled": "Death",
+    "KilledByStorm": "Storm",
+    "Loot": "Loot"
     }
+
     for evt, style in event_styles.items():
         sub = df[df["event"] == evt]
     
