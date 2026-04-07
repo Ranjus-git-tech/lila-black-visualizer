@@ -213,7 +213,7 @@ if view_mode == "Movement":
             marker=dict(
                 size=9,            
                 color=color,
-                line=dict(width=1.5, color="white")
+                opacity=0.9 
             ),
 
             name=evt
@@ -240,12 +240,17 @@ fig.update_layout(
     xaxis=dict(range=[0, 1024], visible=False),
     yaxis=dict(range=[0, 1024], visible=False),
     plot_bgcolor="black",
-    
+
     legend=dict(
     x=0,
     y=0.5,
-    bgcolor="rgba(0,0,0,0.5)"
+    bgcolor="rgba(0,0,0,0.6)",
+    font=dict(
+        color="#66ccff", 
+        size=13
+    )
 ),
+
     showlegend=map_guide
 )
 
