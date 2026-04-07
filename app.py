@@ -195,14 +195,14 @@ if view_mode == "Movement":
 
     # events
     event_styles = {
-    "Kill": {"color": "#ff2e2e", "opacity": 1.0},        # 🔴 human kill
-    "BotKill": {"color": "#00cfff", "opacity": 0.9},     # 🔵 bot kill
+    "Kill": {"color": "#ff0000", "opacity": 1.0},        # 🔴 PURE RED (force visible)
+    "BotKill": {"color": "#00ffff", "opacity": 1.0},     # 🔵 PURE CYAN
     
-    "Killed": {"color": "#b266ff", "opacity": 1.0},      # 🟣 human death
-    "BotKilled": {"color": "#ff8c1a", "opacity": 0.9},   # 🟠 bot death
+    "Killed": {"color": "#ff00ff", "opacity": 1.0},      # 🟣 MAGENTA (stronger than purple)
+    "BotKilled": {"color": "#ff9900", "opacity": 1.0},   # 🟠 ORANGE
     
     "KilledByStorm": {"color": "#ffffff", "opacity": 1.0},
-    "Loot": {"color": "#ffd84d", "opacity": 1.0}
+    "Loot": {"color": "#ffff00", "opacity": 1.0}         # 🟡 PURE YELLOW
     }
     label_map = {
     "Kill": "Kill",
@@ -233,7 +233,7 @@ if view_mode == "Movement":
                         color=style["color"],
                         opacity=1.0
                     ),
-                    name=f"Human {evt}"
+                    name=f"Human {label_map[evt]}"
                 ))
     
             # BOT
@@ -245,9 +245,9 @@ if view_mode == "Movement":
                     marker=dict(
                         size=9,
                         color=style["color"],
-                        opacity=0.5
+                        opacity=1.0
                     ),
-                    name=f"Bot {evt}"
+                    name=f"Bot {label_map[evt]}"
                 ))
     
         else:
@@ -262,7 +262,7 @@ if view_mode == "Movement":
                         color=style["color"],
                         opacity=1.0
                     ),
-                    name=evt
+                    name=label_map[evt]
                 ))
   
 else:
