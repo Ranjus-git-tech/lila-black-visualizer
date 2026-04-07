@@ -212,19 +212,38 @@ if view_mode == "Movement":
         "Loot": "Loot"
     }
     for evt, style in event_styles.items():
-        sub = df[df["event"] == evt]
+    sub = df[df["event"] == evt]
 
+    # split based on actual player type
+    humans = sub[sub["is_human"] == True]
+    bots = sub[sub["is_human"] == False]
+
+    # HUMAN points
+    if not humans.empty:
         fig.add_trace(go.Scattergl(
-            x=sub["px"],
-            y=sub["py"],
+            x=humans["px"],
+            y=humans["py"],
             mode="markers",
             marker=dict(
                 size=9,
                 color=style["color"],
-                opacity=style["opacity"],
+                opacity=1.0
             ),
-            name=label_map[evt]
+            name=f"Human {label_map[evt]}"
+        ))
 
+    # BOT points
+    if not bots.empty:
+        fig.add_trace(go.Scattergl(
+            x=bots["px"],
+            y=bots["py"],
+            mode="markers",
+            marker=dict(
+                size=9,
+                color=style["color"],
+                opacity=0.5   # 👈 difference comes from opacity
+            ),
+            name=f"Bot {label_map[evt]}"
         ))
 
 else:
