@@ -233,7 +233,7 @@ if view_mode == "Movement":
                         color=style["color"],
                         opacity=1.0
                     ),
-                    name=f"Human {label_map[evt]}"
+                    name=f"Human {evt}"
                 ))
     
             # BOT
@@ -247,7 +247,7 @@ if view_mode == "Movement":
                         color=style["color"],
                         opacity=0.5
                     ),
-                    name=f"Bot {label_map[evt]}"
+                    name=f"Bot {evt}"
                 ))
     
         else:
@@ -262,7 +262,7 @@ if view_mode == "Movement":
                         color=style["color"],
                         opacity=1.0
                     ),
-                    name=label_map[evt]
+                    name=evt
                 ))
   
 else:
