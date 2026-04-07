@@ -14,14 +14,14 @@ MAP_CONFIG = {
     "GrandRift": {"scale": 581, "origin_x": -290, "origin_z": -290, "img": "minimaps/GrandRift_Minimap.png"},
     "Lockdown": {"scale": 1000, "origin_x": -500, "origin_z": -500, "img": "minimaps/Lockdown_Minimap.jpg"}
 }
-
 COLORS = {
-    "human": "#1f77b4",
-    "bot": "#e31a1c",
-    "Kill": "#2ca02c",
-    "Death": "#000000",
-    "Loot": "#ffdf00",
-    "Storm": "#9467bd"
+    "human": "#00cfff",   # bright blue 🔵
+    "bot": "#ff2e2e",     # bright red 🔴
+
+    "Kill": "#00ff66",    # neon green 🟢
+    "Death": "#ffffff",   # white ⚪ (visible everywhere)
+    "Loot": "#ffcc00",    # strong yellow 🟡
+    "Storm": "#a64dff"    # bright violet 🟣
 }
 
 DATA_ROOT = "player_data"
@@ -210,7 +210,12 @@ if view_mode == "Movement":
             x=sub["px"],
             y=sub["py"],
             mode="markers",
-            marker=dict(size=8, color=color),
+            marker=dict(
+                size=9,            
+                color=color,
+                line=dict(width=1.5, color="white")
+            ),
+
             name=evt
         ))
 
